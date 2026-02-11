@@ -7,6 +7,30 @@ export const useLocation = () => {
   const [error, setError] = useState<string | null>(null);
   const { isKakaoMapLoaded } = useKakaoMap();
 
+  // 카카오맵 API 로드가 완료되었을 때만 주소 -> 좌표 변환 함수를 실행하고자 훅 내부에 정의
+  const getCoordsFromAddress = (address: string): Promise<{ lat: number; lon: number }> => {
+    return new Promise((resolve, reject) => {
+      if (!isKakaoMapLoaded) {
+        reject(new Error('카카오맵 SDK가 아직 로드되지 않았습니다.'));
+        return;
+      }
+
+      const geocoder = new window.kakao.maps.services.Geocoder();
+      const cleanAddress = address.replace(/-/g, ' ');
+
+      geocoder.addressSearch(cleanAddress, (result, status) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          resolve({
+            lat: Number(result[0].y),
+            lon: Number(result[0].x),
+          });
+        } else {
+          reject(new Error('주소를 찾을 수 없습니다.'));
+        }
+      });
+    });
+  };
+
   useEffect(() => {
     if (!isKakaoMapLoaded || !('geolocation' in navigator)) return;
 
@@ -21,8 +45,8 @@ export const useLocation = () => {
           if (status === window.kakao.maps.services.Status.OK) {
             const addr = result.find((r) => r.region_type === 'H');
             if (addr) {
-              // 예: 경기도 성남시
-              setAddress(`${addr.region_1depth_name} ${addr.region_2depth_name}`)
+              // 예: 경기도 성남시 분당구
+              setAddress(`${addr.region_1depth_name} ${addr.region_2depth_name} ${addr.region_3depth_name}`)
             };
           }
         });
@@ -33,5 +57,5 @@ export const useLocation = () => {
     );
   }, [isKakaoMapLoaded]);
 
-  return { coords, address, error };
+  return { coords, setCoords, address, setAddress, error, getCoordsFromAddress };
 };
