@@ -1,16 +1,21 @@
 import WeatherCard from "@/entities/weather/ui/WeatherCard";
-import { useLocation } from "@/entities/location/model/useLocation";
+import { useLocation } from "@/features/search-location/model/useLocation";
 import { useWeather } from "@/entities/weather/model/useWeather";
 
-const CurrentWeatherContainer = () => {
-  const { coords, address, error: locationError } = useLocation();
+interface CurrentWeatherContainerProps {
+  coords: { lat: number; lon: number } | null;
+  address: string;
+}
+
+const CurrentWeatherContainer = ({ coords, address }: CurrentWeatherContainerProps) => {
   const { weather, isLoading: isWeatherLoading, error: weatherError } = useWeather(coords);
 
-  // 위치 정보 로드 에러 처리
-  if (locationError) return <div className="text-sm text-red-500">{locationError}</div>;
+  if (!coords) {
+    return <div className="text-sm text-gray-500">위치 정보를 확인하고 있습니다...</div>;
+  }
 
-  // 위치 정보를 받아오는 중이거나, 위치 정보는 있지만 날씨 정보를 받아오는 중일 때
-  if (!coords || isWeatherLoading) return <div className="text-sm text-gray-500">날씨 정보 로딩 중...</div>;
+  // 위치 정보는 있지만 날씨 정보를 받아오는 중일 때
+  if (isWeatherLoading) return <div className="text-sm text-gray-500">날씨 정보 로딩 중...</div>;
 
   // 날씨 정보 로드 에러 처리
   if (weatherError) return <div className="text-sm text-red-500">{weatherError}</div>;
