@@ -1,62 +1,11 @@
-import { useState, useEffect } from 'react';
-import { WEATHER_API_KEY } from '@/shared/config/constants';
 import type { WeatherResponse } from '../model/types';
-import { useKakaoMap } from '@/shared/lib/hooks/useKakaoMap';
 
-const WeatherCard = () => {
-  const [weather, setWeather] = useState<WeatherResponse | null>(null);
-  const { isLoaded } = useKakaoMap();
-  const [address, setAddress] = useState<string>('');
-  const [error, setError] = useState<string | null>(null);
+interface WeatherCardProps {
+  weather: WeatherResponse;
+  address?: string;
+}
 
-  const API_KEY = WEATHER_API_KEY;
-
-  useEffect(() => {
-    // SDK가 로드되지 않았으면 실행하지 않음
-    if (!isLoaded) return;
-
-    if (!("geolocation" in navigator)) {
-      setError("브라우저가 위치 정보를 지원하지 않습니다.");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude: lat, longitude: lon } = position.coords;
-
-        try {
-          // 날씨 데이터 가져오기
-          const weatherUrl = `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${lat},${lon}&days=1&aqi=no&alerts=no&lang=ko`;
-          const weatherRes = await fetch(weatherUrl);
-          if (!weatherRes.ok) throw new Error("날씨 데이터를 불러오지 못했습니다.");
-          const weatherData = await weatherRes.json();
-          setWeather(weatherData);
-
-          // 카카오 API로 한글 지명 가져오기 (UI 표시용)
-          const geocoder = new window.kakao.maps.services.Geocoder();
-          geocoder.coord2RegionCode(lon, lat, (result, status) => {
-            if (status === window.kakao.maps.services.Status.OK) {
-              // 행정동 주소 추출 (예: 서울특별시 중구)
-              const addr = result.find(r => r.region_type === 'H');
-              if (addr) setAddress(`${addr.region_1depth_name} ${addr.region_2depth_name}`);
-            }
-          });
-
-        } catch (err) {
-          setError(err instanceof Error ? err.message : "데이터 로드 실패");
-        }
-      },
-      (err) => {
-        setError(`위치 접근 거부: ${err.message}`);
-      }
-    );
-  }, [isLoaded, API_KEY]);
-
-  // 로딩 상태
-  if (!isLoaded) return <div className="loading">지도 SDK 로딩 중...</div>;
-  if (error) return <div className="error-box">{error}</div>;
-  if (!weather) return <div className="loading">위치 및 날씨 정보를 불러오는 중...</div>;
-
+const WeatherCard = ({ weather, address }: WeatherCardProps) => {
   const current = weather.current;
   const today = weather.forecast.forecastday[0].day;
   const hourly = weather.forecast.forecastday[0].hour;
