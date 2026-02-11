@@ -1,10 +1,10 @@
-import { Button } from '@/shared/ui/button/button';
 import './styles/globals.css';
+import CurrentTemperature from '@/widgets/current-temperature/ui/CurrentTemperature';
 
 function App() {
   return (
-    <div className='flex w-full items-center justify-center'>
-      Weather App <Button>테스트</Button>
+    <div className='flex flex-col w-full items-center justify-center'>
+      <CurrentTemperature />
     </div>
   );
 }
