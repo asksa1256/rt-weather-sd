@@ -8,7 +8,7 @@ function App() {
   const { coords, setCoords, address, setAddress, error: locationError } = useLocation();
 
   return (
-    <div className='flex flex-col w-full items-center justify-center'>
+    <main className='flex flex-col w-full items-center justify-center'>
       <SearchLocation
         onSelectAddress={(newCoords, newAddr) => {
           setCoords(newCoords);
@@ -19,11 +19,14 @@ function App() {
       {/* 위치 정보 권한 거부 시 에러 표시 */}
       {locationError && <div className="text-sm text-red-500">{locationError}</div>}
 
-      <CurrentWeatherContainer
-        coords={coords}
-        address={address}
-      />
-    </div>
+      <section className='p-16'>
+        <CurrentWeatherContainer
+          coords={coords}
+          address={address}
+        />
+      </section>
+
+    </main>
   );
 }
 

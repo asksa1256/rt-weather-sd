@@ -12,6 +12,7 @@ interface SearchLocationProps {
 }
 
 export function SearchLocation({ onSelectAddress }: SearchLocationProps) {
+  const [commandOpen, setCommandOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
   const { getCoordsFromAddress } = useLocation();
@@ -26,50 +27,61 @@ export function SearchLocation({ onSelectAddress }: SearchLocationProps) {
   const handleSelect = async (currentValue: string) => {
     try {
       const coords = await getCoordsFromAddress(currentValue);
-      onSelectAddress(coords, currentValue.replace(/-/g, ' '));
+      const selectedAddress = currentValue.replace(/-/g, ' ');
+      onSelectAddress(coords, selectedAddress);
+
+      setInputValue(selectedAddress);
+      setCommandOpen(false);
     } catch (err) {
       alert("위치를 찾을 수 없습니다.");
     }
   };
-
 
   // 검색 결과 로딩을 줄이기 위해 최소 입력 길이 체크
   const isMinLength = inputValue.length >= MIN_INPUT_LENGTH;
 
   const handleInputChange = (val: string) => {
     setInputValue(val);
+
+    if (val.length >= MIN_INPUT_LENGTH) {
+      setCommandOpen(true);
+    } else {
+      setCommandOpen(false);
+    }
+  };
+
+  // 사용자가 검색창 클릭 시 검색 상태 초기화
+  const handleInputFocus = () => {
+    if (inputValue.length >= MIN_INPUT_LENGTH) {
+      setCommandOpen(true);
+    }
   };
 
   return (
-    <Command shouldFilter={isMinLength} className='w-[400px] mx-auto'>
+    <Command shouldFilter={false} className='w-[400px] mx-auto'>
       <CommandInput
         placeholder="예: 종로구, 청운동"
         value={inputValue}
         onValueChange={handleInputChange}
+        onFocus={handleInputFocus} // 포커스 시 자동완성 표시
       />
-      <CommandList>
-        {!isMinLength ? (
-          <div className="py-6 text-center text-sm text-muted-foreground">
-            {`검색어를 ${MIN_INPUT_LENGTH}글자 이상 입력해주세요.`}
-          </div>
-        ) : (
-          <>
-            {filteredAddresses.length === 0 && <CommandEmpty>검색 결과가 없습니다.</CommandEmpty>}
-            <CommandGroup className="max-h-[300px] overflow-y-auto">
-              {filteredAddresses.map((addr) => (
-                <CommandItem
-                  key={addr}
-                  value={addr}
-                  onSelect={() => handleSelect(addr)}
-                >
-                  <Search className="mr-2 h-4 w-4" />
-                  {addr}
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </>
-        )}
-      </CommandList>
+      {isMinLength && commandOpen && (
+        <CommandList>
+          {filteredAddresses.length === 0 && <CommandEmpty>검색 결과가 없습니다.</CommandEmpty>}
+          <CommandGroup className="max-h-[300px] overflow-y-auto">
+            {filteredAddresses.map((addr) => (
+              <CommandItem
+                key={addr}
+                value={addr}
+                onSelect={() => handleSelect(addr)}
+              >
+                <Search className="mr-2 h-4 w-4" />
+                {addr}
+              </CommandItem>
+            ))}
+          </CommandGroup>
+        </CommandList>
+      )}
     </Command>
   );
 }
