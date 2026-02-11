@@ -1,5 +1,4 @@
 import WeatherCard from "@/entities/weather/ui/WeatherCard";
-import { useLocation } from "@/features/search-location/model/useLocation";
 import { useWeather } from "@/entities/weather/model/useWeather";
 
 interface CurrentWeatherContainerProps {
