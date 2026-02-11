@@ -1,44 +1,61 @@
 import { useState, useEffect } from 'react';
 import { WEATHER_API_KEY } from '@/shared/config/constants';
 import type { WeatherResponse } from '../model/types';
+import { useKakaoMap } from '@/shared/lib/hooks/useKakaoMap';
 
 const WeatherCard = () => {
   const [weather, setWeather] = useState<WeatherResponse | null>(null);
+  const { isLoaded } = useKakaoMap();
+  const [address, setAddress] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
 
   const API_KEY = WEATHER_API_KEY;
-  const city = "Seoul";
 
   useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const url = `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=1&aqi=no&alerts=no&lang=ko`;
+    // SDK가 로드되지 않았으면 실행하지 않음
+    if (!isLoaded) return;
 
-        const response = await fetch(url);
+    if (!("geolocation" in navigator)) {
+      setError("브라우저가 위치 정보를 지원하지 않습니다.");
+      return;
+    }
 
-        // fetch는 404나 500 에러 시에도 에러를 throw하지 않으므로 직접 체크가 필요합니다.
-        if (!response.ok) {
-          console.log("네트워크 응답 오류:", response.status, response.statusText);
-          throw new Error('네트워크 응답에 문제가 있습니다.');
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude: lat, longitude: lon } = position.coords;
+
+        try {
+          // 날씨 데이터 가져오기
+          const weatherUrl = `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${lat},${lon}&days=1&aqi=no&alerts=no&lang=ko`;
+          const weatherRes = await fetch(weatherUrl);
+          if (!weatherRes.ok) throw new Error("날씨 데이터를 불러오지 못했습니다.");
+          const weatherData = await weatherRes.json();
+          setWeather(weatherData);
+
+          // 카카오 API로 한글 지명 가져오기 (UI 표시용)
+          const geocoder = new window.kakao.maps.services.Geocoder();
+          geocoder.coord2RegionCode(lon, lat, (result, status) => {
+            if (status === window.kakao.maps.services.Status.OK) {
+              // 행정동 주소 추출 (예: 서울특별시 중구)
+              const addr = result.find(r => r.region_type === 'H');
+              if (addr) setAddress(`${addr.region_1depth_name} ${addr.region_2depth_name}`);
+            }
+          });
+
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "데이터 로드 실패");
         }
-
-        const data = await response.json();
-        setWeather(data);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('알 수 없는 에러가 발생했습니다.');
-        }
-        console.error("에러 상세:", err);
+      },
+      (err) => {
+        setError(`위치 접근 거부: ${err.message}`);
       }
-    };
+    );
+  }, [isLoaded, API_KEY]);
 
-    fetchWeather();
-  }, [API_KEY]);
-
-  if (error) return <div>에러 발생: {error}</div>;
-  if (!weather) return <div>데이터를 불러오는 중...</div>;
+  // 로딩 상태
+  if (!isLoaded) return <div className="loading">지도 SDK 로딩 중...</div>;
+  if (error) return <div className="error-box">{error}</div>;
+  if (!weather) return <div className="loading">위치 및 날씨 정보를 불러오는 중...</div>;
 
   const current = weather.current;
   const today = weather.forecast.forecastday[0].day;
@@ -47,7 +64,7 @@ const WeatherCard = () => {
   return (
     <div className="mx-auto max-w-[600px] p-5 font-sans">
       <h1 className="mb-6 text-2xl font-bold text-gray-800">
-        {weather.location.name} 실시간 날씨
+        {address || weather.location.name} 실시간 날씨
       </h1>
 
       {/* 현재 날씨 및 요약 */}
