@@ -4,7 +4,7 @@ import '@/shared/styles/globals.css';
 import WeatherForecastWidget from '@/widgets/weather-forecast/ui/WeatherForecastWidget';
 
 const App = () => {
-  // weatherapi.com에서 좌표별 지역명을 영어로 제공 -> 한글명으로 통일
+  // 현재 위치, 검색 위치 상태 관리
   const {
     coords,
     setCoords,

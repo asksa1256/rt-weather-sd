@@ -1,3 +1,4 @@
+import AddFavoriteButton from '@/entities/favorites/ui/AddFavoriteButton';
 import type { WeatherResponse } from '@/entities/weather/model/types';
 import CurrentWeatherCard from '@/entities/weather/ui/CurrentWeatherCard';
 import HourlyForecastItem from '@/entities/weather/ui/HourlyForecastItem';
@@ -18,11 +19,16 @@ const WeatherForecastLayout = ({
   return (
     <div className='flex w-full flex-col items-center'>
       {/* 장소 */}
-      <div className='mb-6 w-full md:max-w-[600px]'>
+      <div className='mb-6 flex w-full items-center justify-between md:max-w-[600px]'>
         <h2 className='text-2xl font-bold text-gray-800 md:text-3xl'>
           <b className='block text-blue-500'>{address || location.name}</b>
           <span className='text-xl text-gray-700'>실시간 날씨</span>
         </h2>
+
+        <AddFavoriteButton
+          address={address || location.name}
+          coords={{ lat: location.lat, lon: location.lon }}
+        />
       </div>
 
       {/* 현재 날씨 */}
