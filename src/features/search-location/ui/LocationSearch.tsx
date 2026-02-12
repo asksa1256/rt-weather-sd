@@ -8,7 +8,7 @@ import {
   CommandList,
 } from '@/shared/ui/command';
 import { Popover, PopoverAnchor, PopoverContent } from '@/shared/ui/popover';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useCoordinate } from '../model/useCoordinate';
 
@@ -55,18 +55,36 @@ const LocationSearch = ({ onSelectAddress }: LocationSearchProps) => {
     }
   };
 
+  const handleClear = () => {
+    setInputValue('');
+    setCommandOpen(false);
+  };
+
   return (
-    <div className='mx-auto w-[90%] md:max-w-[600px]'>
+    <div className='mx-auto w-full md:max-w-[600px]'>
       <Popover open={commandOpen} onOpenChange={setCommandOpen}>
         <Command shouldFilter={false}>
           {/* PopoverAnchor: input 너비에 맞춰 리스트 정렬 */}
           <PopoverAnchor asChild>
-            <CommandInput
-              placeholder='예: 종로구, 청운동'
-              value={inputValue}
-              onValueChange={handleInputChange}
-              className='rounded-2xl px-4 py-3 [&_input]:text-lg'
-            />
+            <div className='relative'>
+              <CommandInput
+                placeholder='예: 종로구, 청운동'
+                value={inputValue}
+                onValueChange={handleInputChange}
+                className='rounded-2xl px-4 py-3 [&_input]:text-lg'
+              />
+
+              {/* 검색어가 있을 때만 지우기 버튼 표시 */}
+              {inputValue.length > 0 && (
+                <button
+                  aria-label='검색어 초기화'
+                  onClick={handleClear}
+                  className='text-muted-foreground hover:text-foreground absolute top-1/2 right-3 z-1 -translate-y-1/2 p-1 transition-colors'
+                >
+                  <X className='size-5' />
+                </button>
+              )}
+            </div>
           </PopoverAnchor>
 
           <PopoverContent
