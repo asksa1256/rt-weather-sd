@@ -1,32 +1,16 @@
-import { useState, useEffect } from 'react';
-import type { WeatherResponse } from './types';
-import { WEATHER_API_KEY } from '@/shared/config/constants';
+import { useQuery } from '@tanstack/react-query';
+import { fetchWeather } from './fetchWeather';
 
-export const useWeather = (coords: { lat: number; lon: number } | null) => {
-  const [weather, setWeather] = useState<WeatherResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const { lat, lon } = coords || {};
-
-  useEffect(() => {
-    if (!lat || !lon) return;
-
-    const fetchWeather = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`https://api.weatherapi.com/v1/forecast.json?key=${WEATHER_API_KEY}&q=${lat},${lon}&days=1&aqi=no&alerts=no&lang=ko`);
-        const data = await response.json();
-        setWeather(data);
-      } catch (err) {
-        setError(`날씨 정보를 불러오는 중 오류가 발생했습니다: ${err}`);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchWeather();
-  }, [lat, lon]);
-
-  return { weather, isLoading, error };
+export const useWeather = (
+  coords: { lat: number; lon: number } | null,
+  address: string,
+) => {
+  return useQuery({
+    queryKey: ['weather', address],
+    queryFn: () => fetchWeather(coords!.lat, coords!.lon), // coords가 있을 때만 fetch
+    enabled: !!coords, // coords가 null이 아닐 때만 쿼리 활성화
+    staleTime: 1000 * 60 * 30, // 30분 (지역별 날씨 데이터는 자주 변하지 않으므로, staleTime을 길게 설정)
+    gcTime: 1000 * 60 * 60, // 1시간
+    retry: 1,
+  });
 };
