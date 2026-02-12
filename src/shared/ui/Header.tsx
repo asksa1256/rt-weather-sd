@@ -9,9 +9,12 @@ import {
 } from '@/shared/ui/drawer';
 import FavoriteList from '@/widgets/favorites/ui/FavoriteList';
 import { Menu, Star } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from './button/button';
 
 const Header = () => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-white/80 backdrop-blur-md'>
       <div className='mx-auto flex h-16 items-center justify-between px-4 md:max-w-[600px] md:px-0'>
@@ -23,8 +26,12 @@ const Header = () => {
           </h1>
         </div>
 
-        {/* 즐겨찾기 Drawer */}
-        <Drawer direction='right'>
+        {/* 즐겨찾기 사이드바(Drawer) */}
+        <Drawer
+          direction='right'
+          open={isDrawerOpen}
+          onOpenChange={setIsDrawerOpen}
+        >
           <DrawerTrigger asChild>
             <Button variant='ghost' className='relative'>
               <Menu className='size-5' />
@@ -47,7 +54,7 @@ const Header = () => {
               </DrawerHeader>
 
               <div className='flex-1 overflow-y-auto p-6'>
-                <FavoriteList />
+                <FavoriteList onCloseDrawer={() => setIsDrawerOpen(false)} />
               </div>
             </div>
           </DrawerContent>
