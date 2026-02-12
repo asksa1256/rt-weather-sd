@@ -16,14 +16,7 @@ import { useCoordinate } from '../model/useCoordinate';
 const MAX_SEARCH_RESULTS = 30;
 const MIN_INPUT_LENGTH = 2;
 
-interface LocationSearchProps {
-  onSelectAddress: (
-    coords: { lat: number; lon: number },
-    address: string,
-  ) => void;
-}
-
-const LocationSearch = ({ onSelectAddress }: LocationSearchProps) => {
+const LocationSearch = () => {
   const [commandOpen, setCommandOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
@@ -48,18 +41,16 @@ const LocationSearch = ({ onSelectAddress }: LocationSearchProps) => {
       const coords = await fetchCoords(currentValue);
       const selectedAddress = currentValue.replace(/-/g, ' ');
 
-      // App으로 선택된 좌표와 주소 전달 (현재 위치 갱신)
-      onSelectAddress(coords, selectedAddress);
-
-      setInputValue(selectedAddress);
-      setCommandOpen(false);
-
       // 선택한 주소로 url 파라미터 생성 (검색 후 상세 페이지 데이터 전달)
       const params = new URLSearchParams({
         lat: coords.lat.toString(),
         lon: coords.lon.toString(),
         address: selectedAddress,
       });
+
+      // 검색창 초기화, 자동완성 목록 닫기
+      setInputValue(selectedAddress);
+      setCommandOpen(false);
 
       // 상세 페이지로 이동
       navigate(`/weather?${params.toString()}`);
