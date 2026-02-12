@@ -7,6 +7,7 @@ import {
   CommandItem,
   CommandList,
 } from '@/shared/ui/command';
+import { Popover, PopoverAnchor, PopoverContent } from '@/shared/ui/popover';
 import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useCoordinate } from '../model/useCoordinate';
@@ -32,12 +33,6 @@ const LocationSearch = ({ onSelectAddress }: LocationSearchProps) => {
     setCommandOpen(val.length >= MIN_INPUT_LENGTH);
   };
 
-  const handleInputFocus = () => {
-    if (inputValue.length >= MIN_INPUT_LENGTH) {
-      setCommandOpen(true);
-    }
-  };
-
   const filteredAddresses = useMemo(() => {
     if (inputValue.length < MIN_INPUT_LENGTH) return [];
     return addressData
@@ -60,37 +55,46 @@ const LocationSearch = ({ onSelectAddress }: LocationSearchProps) => {
     }
   };
 
-  const isMinLength = inputValue.length >= MIN_INPUT_LENGTH;
-
   return (
-    <Command shouldFilter={false} className='mx-auto w-[90%] md:max-w-[600px]'>
-      <CommandInput
-        placeholder='예: 종로구, 청운동'
-        value={inputValue}
-        onValueChange={handleInputChange}
-        onFocus={handleInputFocus}
-        className='rounded-2xl px-4 py-3 [&_input]:text-lg'
-      />
-      {isMinLength && commandOpen && (
-        <CommandList>
-          {filteredAddresses.length === 0 && (
-            <CommandEmpty>검색 결과가 없습니다.</CommandEmpty>
-          )}
-          <CommandGroup className='max-h-[300px] overflow-y-auto'>
-            {filteredAddresses.map(addr => (
-              <CommandItem
-                key={addr}
-                value={addr}
-                onSelect={() => handleSelect(addr)}
-              >
-                <Search className='mr-2 h-4 w-4' />
-                {addr}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      )}
-    </Command>
+    <div className='mx-auto w-[90%] md:max-w-[600px]'>
+      <Popover open={commandOpen} onOpenChange={setCommandOpen}>
+        <Command shouldFilter={false}>
+          {/* PopoverAnchor: input 너비에 맞춰 리스트 정렬 */}
+          <PopoverAnchor asChild>
+            <CommandInput
+              placeholder='예: 종로구, 청운동'
+              value={inputValue}
+              onValueChange={handleInputChange}
+              className='rounded-2xl px-4 py-3 [&_input]:text-lg'
+            />
+          </PopoverAnchor>
+
+          <PopoverContent
+            className='w-(--radix-popover-trigger-width) p-0'
+            onOpenAutoFocus={e => e.preventDefault()} // 입력할 동안 input 포커스 유지
+          >
+            <CommandList>
+              {filteredAddresses.length === 0 ? (
+                <CommandEmpty>검색 결과가 없습니다.</CommandEmpty>
+              ) : (
+                <CommandGroup className='max-h-[300px] overflow-y-auto'>
+                  {filteredAddresses.map(addr => (
+                    <CommandItem
+                      key={addr}
+                      value={addr}
+                      onSelect={() => handleSelect(addr)}
+                    >
+                      <Search className='mr-2 h-4 w-4' />
+                      {addr}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              )}
+            </CommandList>
+          </PopoverContent>
+        </Command>
+      </Popover>
+    </div>
   );
 };
 
