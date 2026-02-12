@@ -1,8 +1,28 @@
+import type { FavoriteLocation } from '@/entities/favorites/model/types';
 import FavoriteCard from '@/entities/favorites/ui/FavoriteCard';
 import { useFavorites } from '@/features/favorites/model/useFavorites';
+import { useNavigate } from 'react-router-dom';
 
-const FavoriteList = () => {
+interface FavoriteListProps {
+  onCloseDrawer?: () => void;
+}
+
+const FavoriteList = ({ onCloseDrawer }: FavoriteListProps) => {
   const { favorites } = useFavorites();
+  const navigate = useNavigate();
+
+  const handleSelectFavorite = (fav: FavoriteLocation) => {
+    onCloseDrawer?.();
+
+    // 즐겨찾기 선택 시 장소 상세 페이지로 이동
+    const params = new URLSearchParams({
+      lat: fav.coords.lat.toString(),
+      lon: fav.coords.lon.toString(),
+      address: fav.address,
+    });
+
+    navigate(`/weather?${params.toString()}`);
+  };
 
   if (favorites.length === 0) {
     return (
@@ -14,11 +34,11 @@ const FavoriteList = () => {
   }
 
   return (
-    <div className='space-y-4'>
+    <ul className='space-y-4'>
       {favorites.map(fav => (
-        <FavoriteCard key={fav.id} fav={fav} />
+        <FavoriteCard key={fav.id} fav={fav} onSelect={handleSelectFavorite} />
       ))}
-    </div>
+    </ul>
   );
 };
 

@@ -4,9 +4,21 @@ import { Check, Edit, X } from 'lucide-react';
 import { useState } from 'react';
 import type { FavoriteLocation } from '../model/types';
 
-const FavoriteCard = ({ fav }: { fav: FavoriteLocation }) => {
+interface FavoriteCardProps {
+  fav: FavoriteLocation;
+  onSelect: (fav: FavoriteLocation) => void;
+}
+
+const FavoriteCard = ({ fav, onSelect }: FavoriteCardProps) => {
   const { data: weather } = useWeather(fav.coords, fav.address);
   const { updateFavorite } = useFavorites();
+
+  // 즐겨찾기 선택
+  const handleClick = () => {
+    if (!isEditing) {
+      onSelect(fav);
+    }
+  };
 
   // 즐겨찾기 수정
   const [isEditing, setIsEditing] = useState(false);
@@ -32,9 +44,9 @@ const FavoriteCard = ({ fav }: { fav: FavoriteLocation }) => {
   };
 
   return (
-    <div
+    <li
       className='cursor-pointer rounded-xl border p-4 transition-shadow hover:shadow-md'
-      onClick={() => console.log('Clicked favorite:', fav.address)}
+      onClick={handleClick}
     >
       <div className='flex flex-col items-start justify-between'>
         {/* 장소명(별칭): 조회/수정 모드 토글 */}
@@ -99,7 +111,7 @@ const FavoriteCard = ({ fav }: { fav: FavoriteLocation }) => {
           </span>
         </div>
       )}
-    </div>
+    </li>
   );
 };
 

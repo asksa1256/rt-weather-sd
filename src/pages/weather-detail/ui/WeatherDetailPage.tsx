@@ -1,30 +1,27 @@
-import type { FavoriteLocation } from '@/entities/favorites/model/types';
 import { useWeather } from '@/entities/weather/model/useWeather';
-// import LoadingSpinner from "@/shared/ui/LoadingSpinner";
+import WeatherForecastWidget from '@/widgets/weather-forecast/ui/WeatherForecastWidget';
+import { useSearchParams } from 'react-router-dom';
 
-const WeatherDetail = ({
-  favoriteItem,
-}: {
-  favoriteItem: FavoriteLocation;
-}) => {
-  // 저장된 좌표와 주소를 그대로 useWeather에 전달
-  // 이미 메인에서 조회를 했었다면, 리액트 쿼리가 캐시된 데이터를 즉시 반환
-  const { data: weather, isPending: isWeatherPending } = useWeather(
-    favoriteItem.coords,
-    favoriteItem.address,
-  );
+const WeatherDetailPage = () => {
+  const [searchParams] = useSearchParams();
+  const lat = parseFloat(searchParams.get('lat') || '0');
+  const lon = parseFloat(searchParams.get('lon') || '0');
+  const address = searchParams.get('address') || '';
 
-  if (isWeatherPending) return <div className='pt-20'>로딩중...</div>;
+  const coords = lat && lon ? { lat: Number(lat), lon: Number(lon) } : null;
+
+  const { data: weather, isPending } = useWeather(coords, address);
+
+  if (isPending) return <div className='pt-20'>날씨 정보를 가져오는 중...</div>;
+
+  if (!weather) return <div className='pt-20'>정보를 찾을 수 없습니다.</div>;
 
   if (weather)
     return (
-      <div>
-        <h2>{favoriteItem.name} 날씨</h2>
-        <p>{favoriteItem.address}</p>
-        <div className='temp'>{weather.current.temp_c}°C</div>
-        {/* ... 나머지 날씨 UI */}
+      <div className='flex w-full flex-col gap-12 md:max-w-[600px]'>
+        <WeatherForecastWidget coords={coords} address={address} />
       </div>
     );
 };
 
-export default WeatherDetail;
+export default WeatherDetailPage;
