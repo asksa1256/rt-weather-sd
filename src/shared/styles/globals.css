@@ -127,3 +127,7 @@
 body {
   font-family: 'Pretendard', sans-serif;
 }
+
+button {
+  cursor: pointer;
+}

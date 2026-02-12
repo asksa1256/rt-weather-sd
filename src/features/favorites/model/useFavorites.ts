@@ -80,5 +80,22 @@ export const useFavorites = () => {
     },
   });
 
-  return { favorites, addFavorite, removeFavorite };
+  // 즐겨찾기 수정
+  const updateFavorite = useMutation({
+    mutationFn: async ({ id, newName }: { id: string; newName: string }) => {
+      const current = JSON.parse(
+        localStorage.getItem(STORAGE_KEY) || '[]',
+      ) as FavoriteLocation[];
+      const updated = current.map(fav =>
+        fav.id === id ? { ...fav, name: newName } : fav,
+      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+      return updated;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['favorites'] });
+    },
+  });
+
+  return { favorites, addFavorite, removeFavorite, updateFavorite };
 };
