@@ -14,7 +14,7 @@ const App = () => {
   } = useGeolocation();
 
   return (
-    <main className='flex w-full flex-col items-center justify-center'>
+    <main className='mx-auto flex w-full flex-col items-center justify-center px-4 pt-16'>
       <LocationSearch
         onSelectAddress={(newCoords, newAddr) => {
           setCoords(newCoords);
@@ -27,9 +27,11 @@ const App = () => {
         <div className='text-sm text-red-500'>{locationError}</div>
       )}
 
-      <section className='p-16'>
-        <CurrentWeatherContainer coords={coords} address={address} />
-      </section>
+      <CurrentWeatherContainer
+        coords={coords}
+        address={address}
+        className='mt-8'
+      />
     </main>
   );
 };

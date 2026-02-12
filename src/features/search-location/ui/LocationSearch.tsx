@@ -63,7 +63,7 @@ const LocationSearch = ({ onSelectAddress }: LocationSearchProps) => {
   const isMinLength = inputValue.length >= MIN_INPUT_LENGTH;
 
   return (
-    <Command shouldFilter={false} className='mx-auto w-[400px]'>
+    <Command shouldFilter={false} className='mx-auto w-[90%] md:max-w-[600px]'>
       <CommandInput
         placeholder='예: 종로구, 청운동'
         value={inputValue}

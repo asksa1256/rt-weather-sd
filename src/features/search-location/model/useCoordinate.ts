@@ -2,7 +2,7 @@ import { useKakaoMap } from '@/shared/lib/hooks/useKakaoMap';
 import { useQueryClient } from '@tanstack/react-query';
 
 // 좌표별 장소 캐싱 훅
-export function useCoordinate() {
+export const useCoordinate = () => {
   const queryClient = useQueryClient();
   const { isKakaoMapLoaded } = useKakaoMap();
 
@@ -34,4 +34,4 @@ export function useCoordinate() {
   };
 
   return { fetchCoords };
-}
+};

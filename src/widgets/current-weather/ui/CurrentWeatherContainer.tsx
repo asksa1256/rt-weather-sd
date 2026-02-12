@@ -1,14 +1,17 @@
 import { useWeather } from '@/entities/weather/model/useWeather';
 import WeatherCard from '@/entities/weather/ui/WeatherCard';
+import { cn } from '@/shared/lib/utils/utils';
 
 interface CurrentWeatherContainerProps {
   coords: { lat: number; lon: number } | null;
   address: string | null;
+  className?: string;
 }
 
 const CurrentWeatherContainer = ({
   coords,
   address,
+  className,
 }: CurrentWeatherContainerProps) => {
   const {
     data: weather,
@@ -48,7 +51,12 @@ const CurrentWeatherContainer = ({
   };
 
   return (
-    <div className='flex min-h-[400px] items-center justify-center'>
+    <div
+      className={cn(
+        'flex min-h-[400px] items-center justify-center',
+        className,
+      )}
+    >
       {renderContent()}
     </div>
   );
