@@ -1,5 +1,5 @@
 import { useWeather } from '@/entities/weather/model/useWeather';
-import WeatherCard from '@/entities/weather/ui/WeatherCard';
+import WeatherContainer from '@/entities/weather/ui/WeatherContainer';
 import { cn } from '@/shared/lib/utils/utils';
 
 interface CurrentWeatherContainerProps {
@@ -47,7 +47,7 @@ const CurrentWeatherContainer = ({
         </div>
       );
 
-    return <WeatherCard weather={weather} address={address} />;
+    return <WeatherContainer weather={weather} address={address} />;
   };
 
   return (

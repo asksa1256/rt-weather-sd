@@ -1,19 +1,22 @@
 import type { WeatherResponse } from '../model/types';
 
-interface WeatherCardProps {
+interface WeatherContainerProps {
   weather: WeatherResponse;
   address: string | null;
 }
 
-const WeatherCard = ({ weather, address }: WeatherCardProps) => {
+const WeatherContainer = ({ weather, address }: WeatherContainerProps) => {
   const current = weather.current;
   const today = weather.forecast.forecastday[0].day;
   const hourly = weather.forecast.forecastday[0].hour;
 
   return (
     <div className='w-[90%] md:w-full md:max-w-[600px]'>
-      <h2 className='mb-6 text-2xl font-bold text-gray-800'>
-        {address || weather.location.name} 실시간 날씨
+      <h2 className='mb-4 text-2xl font-bold text-gray-800 md:text-3xl'>
+        <b className='block text-blue-500'>
+          {address || weather.location.name}
+        </b>
+        <span className='text-xl text-gray-700'>실시간 날씨</span>
       </h2>
 
       <section className='mb-8 rounded-2xl bg-blue-50 p-6 shadow-sm ring-1 ring-blue-100'>
@@ -71,4 +74,4 @@ const WeatherCard = ({ weather, address }: WeatherCardProps) => {
   );
 };
 
-export default WeatherCard;
+export default WeatherContainer;
