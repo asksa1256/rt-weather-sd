@@ -1,7 +1,7 @@
 import { useGeolocation } from '@/features/search-location/model/useGeolocation';
 import LocationSearch from '@/features/search-location/ui/LocationSearch';
+import '@/shared/styles/globals.css';
 import CurrentWeatherContainer from '@/widgets/current-weather/ui/CurrentWeatherContainer';
-import './styles/globals.css';
 
 const App = () => {
   // weatherapi.com에서 좌표별 지역명을 영어로 제공 -> 한글명으로 통일

@@ -12,7 +12,7 @@ const CurrentWeatherContainer = ({
 }: CurrentWeatherContainerProps) => {
   const {
     data: weather,
-    isLoading: isWeatherLoading,
+    isPending: isWeatherPending,
     isError: isWeatherError,
     error,
   } = useWeather(coords, address);
@@ -25,7 +25,7 @@ const CurrentWeatherContainer = ({
         </div>
       );
 
-    if (isWeatherLoading)
+    if (isWeatherPending)
       return (
         <div className='text-sm text-gray-500'>날씨 정보 불러오는 중...</div>
       );

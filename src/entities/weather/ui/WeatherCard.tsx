@@ -11,13 +11,13 @@ const WeatherCard = ({ weather, address }: WeatherCardProps) => {
   const hourly = weather.forecast.forecastday[0].hour;
 
   return (
-    <div className='mx-auto max-w-[600px] p-5 font-sans'>
+    <div className='mx-auto max-w-[600px] p-5'>
       <h1 className='mb-6 text-2xl font-bold text-gray-800'>
         {address || weather.location.name} 실시간 날씨
       </h1>
 
-      {/* 현재 날씨 및 요약 */}
       <section className='mb-8 rounded-2xl bg-blue-50 p-6 shadow-sm ring-1 ring-blue-100'>
+        {/* 현재 날씨 */}
         <div className='flex items-center justify-between'>
           <div>
             <h2 className='text-6xl font-extrabold text-blue-900'>
@@ -34,6 +34,7 @@ const WeatherCard = ({ weather, address }: WeatherCardProps) => {
           />
         </div>
 
+        {/* 최고/최저 기온 */}
         <div className='mt-5 flex gap-5 font-semibold'>
           <span className='flex items-center gap-1 text-red-500'>
             <span className='text-sm opacity-70'>최고</span> {today.maxtemp_c}°
