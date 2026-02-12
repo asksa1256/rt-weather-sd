@@ -61,7 +61,7 @@ const LocationSearch = ({ onSelectAddress }: LocationSearchProps) => {
   };
 
   return (
-    <div className='mx-auto w-full md:max-w-[600px]'>
+    <div className='w-full'>
       <Popover open={commandOpen} onOpenChange={setCommandOpen}>
         <Command shouldFilter={false}>
           {/* PopoverAnchor: input 너비에 맞춰 리스트 정렬 */}
