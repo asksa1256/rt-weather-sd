@@ -10,6 +10,7 @@ import {
 import { Popover, PopoverAnchor, PopoverContent } from '@/shared/ui/popover';
 import { Search, X } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCoordinate } from '../model/useCoordinate';
 
 const MAX_SEARCH_RESULTS = 30;
@@ -28,6 +29,8 @@ const LocationSearch = ({ onSelectAddress }: LocationSearchProps) => {
 
   const { fetchCoords } = useCoordinate();
 
+  const navigate = useNavigate();
+
   const handleInputChange = (val: string) => {
     setInputValue(val);
     setCommandOpen(val.length >= MIN_INPUT_LENGTH);
@@ -45,11 +48,21 @@ const LocationSearch = ({ onSelectAddress }: LocationSearchProps) => {
       const coords = await fetchCoords(currentValue);
       const selectedAddress = currentValue.replace(/-/g, ' ');
 
-      // App으로 선택된 좌표와 주소 전달
+      // App으로 선택된 좌표와 주소 전달 (현재 위치 갱신)
       onSelectAddress(coords, selectedAddress);
 
       setInputValue(selectedAddress);
       setCommandOpen(false);
+
+      // 선택한 주소로 url 파라미터 생성 (검색 후 상세 페이지 데이터 전달)
+      const params = new URLSearchParams({
+        lat: coords.lat.toString(),
+        lon: coords.lon.toString(),
+        address: selectedAddress,
+      });
+
+      // 상세 페이지로 이동
+      navigate(`/weather?${params.toString()}`);
     } catch (err) {
       alert(`해당 위치를 찾지 못했습니다: ${(err as Error).message}`);
     }

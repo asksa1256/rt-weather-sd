@@ -32,7 +32,7 @@ const WeatherForecastLayout = ({
       </div>
 
       {/* 현재 날씨 */}
-      <div className='w-full md:max-w-[600px]'>
+      <div className='w-full'>
         <CurrentWeatherCard
           temp={current.temp_c}
           condition={current.condition}
@@ -41,7 +41,7 @@ const WeatherForecastLayout = ({
       </div>
 
       {/* 시간대별 예보 */}
-      <section className='w-full max-w-[100vw] md:max-w-[600px]'>
+      <section className='w-full max-w-[100vw]'>
         <h3 className='mb-4 text-lg font-bold text-gray-700'>시간대별 예보</h3>
         <div className='scrollbar-hide flex gap-2 overflow-x-auto pb-4'>
           {hourly.map((hour, idx) => (
