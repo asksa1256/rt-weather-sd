@@ -1,18 +1,14 @@
 import { useWeather } from '@/entities/weather/model/useWeather';
-import WeatherContainer from '@/entities/weather/ui/WeatherContainer';
 import { cn } from '@/shared/lib/utils/utils';
+import WeatherForecastLayout from './WeatherForecastLayout';
 
-interface CurrentWeatherContainerProps {
+interface Props {
   coords: { lat: number; lon: number } | null;
   address: string | null;
   className?: string;
 }
 
-const CurrentWeatherContainer = ({
-  coords,
-  address,
-  className,
-}: CurrentWeatherContainerProps) => {
+const WeatherForecastWidget = ({ coords, address, className }: Props) => {
   const {
     data: weather,
     isPending: isWeatherPending,
@@ -47,13 +43,13 @@ const CurrentWeatherContainer = ({
         </div>
       );
 
-    return <WeatherContainer weather={weather} address={address} />;
+    return <WeatherForecastLayout weather={weather} address={address} />;
   };
 
   return (
     <div
       className={cn(
-        'flex min-h-[400px] items-center justify-center',
+        'flex min-h-[400px] w-full items-center justify-center',
         className,
       )}
     >
@@ -62,4 +58,4 @@ const CurrentWeatherContainer = ({
   );
 };
 
-export default CurrentWeatherContainer;
+export default WeatherForecastWidget;
