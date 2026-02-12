@@ -14,25 +14,18 @@ import { useCoordinate } from '../model/useCoordinate';
 const MAX_SEARCH_RESULTS = 30;
 const MIN_INPUT_LENGTH = 2;
 
-interface SearchLocationProps {
+interface LocationSearchProps {
   onSelectAddress: (
     coords: { lat: number; lon: number },
     address: string,
   ) => void;
 }
 
-export function SearchLocation({ onSelectAddress }: SearchLocationProps) {
+const LocationSearch = ({ onSelectAddress }: LocationSearchProps) => {
   const [commandOpen, setCommandOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
   const { fetchCoords } = useCoordinate();
-
-  const filteredAddresses = useMemo(() => {
-    if (inputValue.length < MIN_INPUT_LENGTH) return [];
-    return addressData
-      .filter(addr => addr.includes(inputValue))
-      .slice(0, MAX_SEARCH_RESULTS);
-  }, [inputValue]);
 
   const handleInputChange = (val: string) => {
     setInputValue(val);
@@ -45,11 +38,19 @@ export function SearchLocation({ onSelectAddress }: SearchLocationProps) {
     }
   };
 
+  const filteredAddresses = useMemo(() => {
+    if (inputValue.length < MIN_INPUT_LENGTH) return [];
+    return addressData
+      .filter(addr => addr.includes(inputValue))
+      .slice(0, MAX_SEARCH_RESULTS); // 렌더링 속도 개선을 위해 상위 30개 검색 결과만 반환
+  }, [inputValue]);
+
   const handleSelect = async (currentValue: string) => {
     try {
       const coords = await fetchCoords(currentValue);
       const selectedAddress = currentValue.replace(/-/g, ' ');
 
+      // App으로 선택된 좌표와 주소 전달
       onSelectAddress(coords, selectedAddress);
 
       setInputValue(selectedAddress);
@@ -90,4 +91,6 @@ export function SearchLocation({ onSelectAddress }: SearchLocationProps) {
       )}
     </Command>
   );
-}
+};
+
+export default LocationSearch;

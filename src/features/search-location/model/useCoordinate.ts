@@ -7,10 +7,8 @@ export function useCoordinate() {
   const { isKakaoMapLoaded } = useKakaoMap();
 
   const fetchCoords = async (address: string) => {
-    const cleanAddress = address.replace(/-/g, ' ');
-
     return await queryClient.fetchQuery({
-      queryKey: ['coords', cleanAddress], // ['coords', '경기도 성남시 분당구']
+      queryKey: ['coords', address], // ['coords', '경기도 성남시 분당구']
       queryFn: () => {
         return new Promise<{ lat: number; lon: number }>((resolve, reject) => {
           // 카카오맵 API 로드가 완료되었을 때만 주소 -> 좌표 변환
@@ -19,7 +17,7 @@ export function useCoordinate() {
           }
 
           const geocoder = new window.kakao.maps.services.Geocoder();
-          geocoder.addressSearch(cleanAddress, (result, status) => {
+          geocoder.addressSearch(address, (result, status) => {
             if (status === window.kakao.maps.services.Status.OK) {
               resolve({
                 lat: Number(result[0].y),

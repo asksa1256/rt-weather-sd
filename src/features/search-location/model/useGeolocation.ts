@@ -6,7 +6,7 @@ export const useGeolocation = () => {
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(
     null,
   );
-  const [address, setAddress] = useState<string>('');
+  const [address, setAddress] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { isKakaoMapLoaded } = useKakaoMap();
 
