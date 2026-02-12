@@ -1,4 +1,3 @@
-import { useLocation } from '@/features/search-location/model/useLocation';
 import addressData from '@/shared/config/korea_districts.json';
 import {
   Command,
@@ -10,9 +9,10 @@ import {
 } from '@/shared/ui/command';
 import { Search } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { useCoordinate } from '../model/useCoordinate';
 
-const MIN_INPUT_LENGTH = 1;
 const MAX_SEARCH_RESULTS = 30;
+const MIN_INPUT_LENGTH = 2;
 
 interface SearchLocationProps {
   onSelectAddress: (
@@ -25,20 +25,31 @@ export function SearchLocation({ onSelectAddress }: SearchLocationProps) {
   const [commandOpen, setCommandOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
-  const { getCoordsFromAddress } = useLocation();
+  const { fetchCoords } = useCoordinate();
 
   const filteredAddresses = useMemo(() => {
-    // 렌더링 속도 개선을 위해, 상위 30개 검색 결과만 반환
+    if (inputValue.length < MIN_INPUT_LENGTH) return [];
     return addressData
       .filter(addr => addr.includes(inputValue))
       .slice(0, MAX_SEARCH_RESULTS);
   }, [inputValue]);
 
+  const handleInputChange = (val: string) => {
+    setInputValue(val);
+    setCommandOpen(val.length >= MIN_INPUT_LENGTH);
+  };
+
+  const handleInputFocus = () => {
+    if (inputValue.length >= MIN_INPUT_LENGTH) {
+      setCommandOpen(true);
+    }
+  };
+
   const handleSelect = async (currentValue: string) => {
     try {
-      // 주소를 좌표로 변환하여 상위 컴포넌트에 전달
-      const coords = await getCoordsFromAddress(currentValue);
+      const coords = await fetchCoords(currentValue);
       const selectedAddress = currentValue.replace(/-/g, ' ');
+
       onSelectAddress(coords, selectedAddress);
 
       setInputValue(selectedAddress);
@@ -48,25 +59,7 @@ export function SearchLocation({ onSelectAddress }: SearchLocationProps) {
     }
   };
 
-  // 검색 결과 로딩을 줄이기 위해 최소 입력 길이 체크
   const isMinLength = inputValue.length >= MIN_INPUT_LENGTH;
-
-  const handleInputChange = (val: string) => {
-    setInputValue(val);
-
-    if (val.length >= MIN_INPUT_LENGTH) {
-      setCommandOpen(true);
-    } else {
-      setCommandOpen(false);
-    }
-  };
-
-  // 사용자가 검색창 클릭 시 검색 상태 초기화
-  const handleInputFocus = () => {
-    if (inputValue.length >= MIN_INPUT_LENGTH) {
-      setCommandOpen(true);
-    }
-  };
 
   return (
     <Command shouldFilter={false} className='mx-auto w-[400px]'>
@@ -74,7 +67,7 @@ export function SearchLocation({ onSelectAddress }: SearchLocationProps) {
         placeholder='예: 종로구, 청운동'
         value={inputValue}
         onValueChange={handleInputChange}
-        onFocus={handleInputFocus} // 포커스 시 자동완성 표시
+        onFocus={handleInputFocus}
       />
       {isMinLength && commandOpen && (
         <CommandList>
