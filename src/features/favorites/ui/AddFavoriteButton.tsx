@@ -1,5 +1,5 @@
+import { useFavorites } from '@/features/favorites/model/useFavorites';
 import { Star } from 'lucide-react';
-import { useFavorites } from '../model/useFavorites';
 
 interface AddFavoriteButtonProps {
   address: string;
