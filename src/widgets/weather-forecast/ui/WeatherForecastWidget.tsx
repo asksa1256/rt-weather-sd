@@ -17,12 +17,7 @@ const WeatherForecastWidget = ({ coords, address, className }: Props) => {
   } = useWeather(coords, address);
 
   const renderContent = () => {
-    if (!coords)
-      return (
-        <div className='text-sm text-gray-500'>
-          위치 정보를 확인하고 있습니다...
-        </div>
-      );
+    if (!coords) return;
 
     if (isWeatherPending)
       return (
