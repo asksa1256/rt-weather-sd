@@ -8,7 +8,7 @@ import {
   CommandList,
 } from '@/shared/ui/command';
 import { Popover, PopoverAnchor, PopoverContent } from '@/shared/ui/popover';
-import { Search, X } from 'lucide-react';
+import { Search, X, Info } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCoordinate } from '../model/useCoordinate';
@@ -68,7 +68,6 @@ const LocationSearch = () => {
     <div className='w-full'>
       <Popover open={commandOpen} onOpenChange={setCommandOpen}>
         <Command shouldFilter={false}>
-          {/* PopoverAnchor: input 너비에 맞춰 리스트 정렬 */}
           <PopoverAnchor asChild>
             <div className='relative'>
               <CommandInput
@@ -100,10 +99,14 @@ const LocationSearch = () => {
                 <CommandEmpty>검색 결과가 없습니다.</CommandEmpty>
               ) : (
                 <CommandGroup className='max-h-[300px] overflow-y-auto'>
+                  {filteredAddresses.length >= MAX_SEARCH_RESULTS && (
+                    <p className='flex items-center text-sm text-gray-500 p-2 gap-1'><Info className='size-3.5' /> 검색 결과는 {MAX_SEARCH_RESULTS}개까지 표시됩니다.</p>
+                  )}
                   {filteredAddresses.map(addr => (
                     <CommandItem
                       key={addr}
                       value={addr}
+                      className='cursor-pointer'
                       onSelect={() => handleSelect(addr)}
                     >
                       <Search className='mr-2 h-4 w-4' />
