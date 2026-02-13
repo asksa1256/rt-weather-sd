@@ -1,5 +1,5 @@
+import type { FavoriteLocation } from '@/entities/favorites/model/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { FavoriteLocation } from '../../../entities/favorites/model/types';
 
 const STORAGE_KEY = 'weather_favorites';
 const MAX_FAVORITES = 6;
