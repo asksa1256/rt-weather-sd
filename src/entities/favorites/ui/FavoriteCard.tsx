@@ -21,9 +21,20 @@ const FavoriteCard = ({ fav, onSelect }: FavoriteCardProps) => {
   // 즐겨찾기 수정
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const handleEdit = (e: MouseEvent) => {
+  const handleEditModalOpen = (e: MouseEvent) => {
     e.stopPropagation();
     setIsEditModalOpen(true);
+  };
+
+  const handleConfirmEdit = (newName: string) => {
+    updateFavorite.mutate(
+      { id: fav.id, newName },
+      {
+        onSuccess: () => {
+          setIsEditModalOpen(false);
+        },
+      },
+    );
   };
 
   // 즐겨찾기 삭제
@@ -60,7 +71,7 @@ const FavoriteCard = ({ fav, onSelect }: FavoriteCardProps) => {
                   size='icon'
                   title='즐겨찾기 수정'
                   className='size-4 text-gray-400 hover:text-blue-500'
-                  onClick={handleEdit}
+                  onClick={handleEditModalOpen}
                 >
                   <Edit size={16} />
                 </Button>
@@ -110,17 +121,9 @@ const FavoriteCard = ({ fav, onSelect }: FavoriteCardProps) => {
           <EditFavoriteNameDialog
             initialName={fav.name}
             open={isEditModalOpen}
+            isSubmitting={updateFavorite.isPending}
             onClose={() => setIsEditModalOpen(false)}
-            onConfirm={newName =>
-              updateFavorite.mutate(
-                { id: fav.id, newName },
-                {
-                  onSuccess: () => {
-                    setIsEditModalOpen(false);
-                  },
-                },
-              )
-            }
+            onConfirm={handleConfirmEdit}
           />
         )}
       </>
