@@ -1,9 +1,9 @@
 import { useWeather } from '@/entities/weather/model/useWeather';
 import { useFavorites } from '@/features/favorites/model/useFavorites';
-import { Check, Edit, X, Trash } from 'lucide-react';
+import { Button } from '@/shared/ui/button/button';
+import { Check, Edit, Trash, X } from 'lucide-react';
 import { useState, type MouseEvent } from 'react';
 import type { FavoriteLocation } from '../model/types';
-import { Button } from '@/shared/ui/button/button';
 
 interface FavoriteCardProps {
   fav: FavoriteLocation;
@@ -11,7 +11,10 @@ interface FavoriteCardProps {
 }
 
 const FavoriteCard = ({ fav, onSelect }: FavoriteCardProps) => {
-  const { data: weather, isLoading: isWeatherLoading } = useWeather(fav.coords, fav.address);
+  const { data: weather, isLoading: isWeatherLoading } = useWeather(
+    fav.coords,
+    fav.address,
+  );
   const { updateFavorite, removeFavorite } = useFavorites();
 
   // 즐겨찾기 선택
@@ -49,14 +52,14 @@ const FavoriteCard = ({ fav, onSelect }: FavoriteCardProps) => {
     e.stopPropagation();
     if (!window.confirm(`${name} 즐겨찾기를 삭제하시겠습니까?`)) return;
     removeFavorite.mutate(fav.id);
-  }
+  };
 
   // 로딩 스켈레톤
   if (isWeatherLoading) {
     return (
-      <li className='cursor-pointer rounded-xl border p-4 animate-pulse'>
-        <div className='h-6 w-full bg-gray-200 mb-4 rounded'></div>
-        <div className='h-4 w-[60%] bg-gray-200 rounded'></div>
+      <li className='animate-pulse cursor-pointer rounded-xl border p-4'>
+        <div className='mb-4 h-6 w-full rounded bg-gray-200'></div>
+        <div className='h-4 w-[60%] rounded bg-gray-200'></div>
       </li>
     );
   }
@@ -64,10 +67,10 @@ const FavoriteCard = ({ fav, onSelect }: FavoriteCardProps) => {
   if (weather)
     return (
       <li
-        className='flex justify-between cursor-pointer rounded-xl border p-4 transition-shadow hover:shadow-md'
+        className='flex cursor-pointer justify-between rounded-xl border p-4 transition-shadow hover:shadow-md'
         onClick={handleClick}
       >
-        <div className='flex flex-col gap-1'>
+        <div className='flex max-w-[80%] flex-col gap-1'>
           {/* 장소명(별칭): 조회/수정 모드 */}
           <div>
             {isEditing ? (
@@ -112,7 +115,10 @@ const FavoriteCard = ({ fav, onSelect }: FavoriteCardProps) => {
             )}
 
             {/* 주소 */}
-            <h5 className='text-sm text-gray-500'>주소: {fav.address}</h5>
+            <h5 className='text-sm break-keep text-gray-500'>
+              <span className='hidden sm:inline-block'>주소:</span>{' '}
+              {fav.address}
+            </h5>
           </div>
 
           {/* 기온 */}
@@ -141,7 +147,8 @@ const FavoriteCard = ({ fav, onSelect }: FavoriteCardProps) => {
           variant='ghost'
           size='icon'
           title='즐겨찾기 삭제'
-          onClick={(e) => handleDelete(e, fav.name)}
+          className='size-7'
+          onClick={e => handleDelete(e, fav.name)}
         >
           <Trash className='size-4 text-gray-500' />
         </Button>

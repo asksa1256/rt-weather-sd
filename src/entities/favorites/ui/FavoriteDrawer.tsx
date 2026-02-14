@@ -1,14 +1,14 @@
+import { Button } from '@/shared/ui/button/button';
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger
+  DrawerTrigger,
 } from '@/shared/ui/drawer';
-import { Button } from '@/shared/ui/button/button';
 import FavoriteList from '@/widgets/favorites/ui/FavoriteList';
-import { Menu, Star, X } from 'lucide-react';
+import { Info, Menu, Star, X } from 'lucide-react';
 import { useState } from 'react';
 
 const FavoriteDrawer = () => {
@@ -36,18 +36,23 @@ const FavoriteDrawer = () => {
                 즐겨찾기
               </DrawerTitle>
               <DrawerClose asChild>
-                <Button variant='ghost' size='icon' title='즐겨찾기 닫기'><X className='size-5' /></Button>
+                <Button variant='ghost' size='icon' title='즐겨찾기 닫기'>
+                  <X className='size-5' />
+                </Button>
               </DrawerClose>
             </div>
           </DrawerHeader>
 
-          <div className='flex-1 overflow-y-auto p-6'>
+          <div className='flex-1 overflow-y-auto p-4'>
+            <p className='flex items-center gap-1 p-2 text-sm text-gray-500'>
+              <Info className='size-3.5' /> 장소별 별칭을 수정할 수 있습니다.
+            </p>
             <FavoriteList onCloseDrawer={() => setIsDrawerOpen(false)} />
           </div>
         </div>
       </DrawerContent>
     </Drawer>
-  )
-}
+  );
+};
 
 export default FavoriteDrawer;
