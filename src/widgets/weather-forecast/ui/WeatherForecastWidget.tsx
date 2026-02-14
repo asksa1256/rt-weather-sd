@@ -1,5 +1,6 @@
 import { useWeather } from '@/entities/weather/model/useWeather';
 import { cn } from '@/shared/lib/utils/utils';
+import LocationPermissionMessage from '@/shared/ui/message/LocationPermissionMessage';
 import WeatherForecastLayout from './WeatherForecastLayout';
 
 interface Props {
@@ -17,7 +18,7 @@ const WeatherForecastWidget = ({ coords, address, className }: Props) => {
   } = useWeather(coords, address);
 
   const renderContent = () => {
-    if (!coords) return;
+    if (!coords) return <LocationPermissionMessage />;
 
     if (isWeatherPending)
       return (
