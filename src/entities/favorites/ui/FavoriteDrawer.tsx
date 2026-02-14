@@ -1,3 +1,4 @@
+import { useFavorites } from '@/features/favorites/model/useFavorites';
 import { Button } from '@/shared/ui/button/button';
 import {
   Drawer,
@@ -13,6 +14,7 @@ import { useState } from 'react';
 
 const FavoriteDrawer = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { favorites } = useFavorites();
 
   return (
     <Drawer
@@ -44,10 +46,24 @@ const FavoriteDrawer = () => {
           </DrawerHeader>
 
           <div className='flex-1 overflow-y-auto p-4'>
-            <p className='flex items-center gap-1 p-2 text-sm text-gray-500'>
-              <Info className='size-3.5' /> 장소별 별칭을 수정할 수 있습니다.
-            </p>
-            <FavoriteList onCloseDrawer={() => setIsDrawerOpen(false)} />
+            {favorites.length === 0 && (
+              <div className='flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-gray-400'>
+                <p>등록된 즐겨찾기가 없습니다.</p>
+                <p className='text-sm'>장소를 즐겨찾기 해보세요!</p>
+              </div>
+            )}
+            {favorites.length > 0 && (
+              <>
+                <p className='flex items-center gap-1 p-2 text-sm text-gray-500'>
+                  <Info className='size-3.5' /> 장소별 별칭을 수정할 수
+                  있습니다.
+                </p>
+                <FavoriteList
+                  favorites={favorites}
+                  onCloseDrawer={() => setIsDrawerOpen(false)}
+                />
+              </>
+            )}
           </div>
         </div>
       </DrawerContent>

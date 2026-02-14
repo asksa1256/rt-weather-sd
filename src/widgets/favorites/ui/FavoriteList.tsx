@@ -1,14 +1,13 @@
 import type { FavoriteLocation } from '@/entities/favorites/model/types';
 import FavoriteCard from '@/entities/favorites/ui/FavoriteCard';
-import { useFavorites } from '@/features/favorites/model/useFavorites';
 import { useNavigate } from 'react-router-dom';
 
 interface FavoriteListProps {
+  favorites: FavoriteLocation[];
   onCloseDrawer?: () => void;
 }
 
-const FavoriteList = ({ onCloseDrawer }: FavoriteListProps) => {
-  const { favorites } = useFavorites();
+const FavoriteList = ({ favorites, onCloseDrawer }: FavoriteListProps) => {
   const navigate = useNavigate();
 
   const handleSelectFavorite = (fav: FavoriteLocation) => {
@@ -23,15 +22,6 @@ const FavoriteList = ({ onCloseDrawer }: FavoriteListProps) => {
 
     navigate(`/weather?${params.toString()}`);
   };
-
-  if (favorites.length === 0) {
-    return (
-      <div className='flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-10 text-gray-400'>
-        <p>등록된 즐겨찾기가 없습니다.</p>
-        <p className='text-sm'>장소를 즐겨찾기 해보세요!</p>
-      </div>
-    );
-  }
 
   return (
     <ul className='space-y-4'>

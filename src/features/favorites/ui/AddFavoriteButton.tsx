@@ -21,7 +21,7 @@ const AddFavoriteButton = ({ address, coords }: AddFavoriteButtonProps) => {
         return;
       }
       addFavorite.mutate({
-        id: address, // 주소를 ID로 활용
+        id: crypto.randomUUID(),
         address,
         name: address,
         coords,
