@@ -44,3 +44,7 @@ export interface WeatherResponse {
     }>;
   };
 }
+
+export type Forecast = WeatherResponse['forecast'];
+export type ForecastDay = Forecast['forecastday'][number];
+export type ForecastHour = ForecastDay['hour'][number];

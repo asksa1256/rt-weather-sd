@@ -1,5 +1,5 @@
 import { useGeolocation } from '@/features/search-location/model/useGeolocation';
-import WeatherForecastWidget from '@/widgets/weather-forecast/ui/WeatherForecastWidget';
+import WeatherForecastWidget from '@/widgets/weather/ui/WeatherForecastWidget';
 
 const MainPage = () => {
   // 현재 위치 가져오기

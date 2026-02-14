@@ -1,6 +1,6 @@
-import WeatherForecastWidget from '@/widgets/weather-forecast/ui/WeatherForecastWidget';
-import { useSearchParams } from 'react-router-dom';
 import MainButton from '@/shared/ui/button/MainButton';
+import WeatherForecastWidget from '@/widgets/weather/ui/WeatherForecastWidget';
+import { useSearchParams } from 'react-router-dom';
 
 const WeatherDetailPage = () => {
   const [searchParams] = useSearchParams();

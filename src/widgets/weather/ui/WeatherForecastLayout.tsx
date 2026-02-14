@@ -1,7 +1,7 @@
 import type { WeatherResponse } from '@/entities/weather/model/types';
 import CurrentWeatherCard from '@/entities/weather/ui/CurrentWeatherCard';
-import HourlyForecastItem from '@/entities/weather/ui/HourlyForecastItem';
 import AddFavoriteButton from '@/features/favorites/ui/AddFavoriteButton';
+import HourlyHorizontalScroll from './HourlyHorizontalScroll';
 
 interface WeatherForecastLayoutProps {
   weather: WeatherResponse;
@@ -43,16 +43,7 @@ const WeatherForecastLayout = ({
       {/* 시간대별 예보 */}
       <section className='w-full max-w-[100vw]'>
         <h3 className='mb-4 text-lg font-bold text-gray-700'>시간대별 예보</h3>
-        <div className='scrollbar-hide flex gap-2 overflow-x-auto pb-4'>
-          {hourly.map((hour, idx) => (
-            <HourlyForecastItem
-              key={`${hour.time}_${idx}`}
-              time={hour.time}
-              icon={hour.condition.icon}
-              temp={hour.temp_c}
-            />
-          ))}
-        </div>
+        <HourlyHorizontalScroll hourly={hourly} />
       </section>
     </div>
   );
