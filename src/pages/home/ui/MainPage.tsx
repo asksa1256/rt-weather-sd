@@ -1,4 +1,4 @@
-import { useGeolocation } from '@/features/search-location/model/useGeolocation';
+import { useGeolocation } from '@/shared/lib/hooks/useGeolocation';
 import WeatherForecastWidget from '@/widgets/weather/ui/WeatherForecastWidget';
 import { MapPin } from 'lucide-react';
 
@@ -6,8 +6,7 @@ const MainPage = () => {
   // 현재 위치 가져오기
   const { coords, address, error: gelolocationError } = useGeolocation();
 
-  if (gelolocationError) return;
-  <div className='text-center text-sm text-red-500'>{gelolocationError}</div>;
+  if (gelolocationError) return <div className='text-center text-sm text-red-500'>{gelolocationError}</div>;
 
   return (
     <section className='w-full'>

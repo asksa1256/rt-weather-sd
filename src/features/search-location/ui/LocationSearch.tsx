@@ -27,19 +27,23 @@ const LocationSearch = () => {
   const handleSelect = async (addr: string) => {
     try {
       const coords = await fetchCoords(addr);
-      const selectedAddress = addr.replace(/-/g, ' ');
 
       const params = new URLSearchParams({
         lat: coords.lat.toString(),
         lon: coords.lon.toString(),
-        address: selectedAddress,
+        address: addr,
       });
 
-      setInputValue(selectedAddress);
+      setInputValue(addr);
       setCommandOpen(false);
       navigate(`/weather?${params.toString()}`);
-    } catch (err) {
-      alert(`위치를 찾지 못했습니다: ${err}`);
+    } catch {
+      // 좌표 변환 실패 시 coords 없이 상세 페이지로 라우팅 및 에러 ui 표시
+      const params = new URLSearchParams({ address: addr });
+
+      setInputValue(addr);
+      setCommandOpen(false);
+      navigate(`/weather?${params.toString()}`);
     }
   };
 
@@ -52,11 +56,17 @@ const LocationSearch = () => {
               <CommandInput
                 placeholder='예: 종로구, 청운동'
                 value={inputValue}
+                className='rounded-2xl px-4 py-3 [&_input]:text-lg'
                 onValueChange={val => {
                   setInputValue(val);
                   setCommandOpen(val.length >= MIN_INPUT_LENGTH);
                 }}
-                className='rounded-2xl px-4 py-3 [&_input]:text-lg'
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && inputValue.trim()) {
+                    e.preventDefault();
+                    handleSelect(inputValue.trim());
+                  }
+                }}
               />
               <SearchStatus
                 isLoading={isLocationLoading}
