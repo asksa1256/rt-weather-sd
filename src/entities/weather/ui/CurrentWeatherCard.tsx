@@ -15,7 +15,7 @@ const CurrentWeatherCard = ({
   condition,
   today,
 }: CurrentWeatherCardProps) => (
-  <section className='mb-8 rounded-2xl bg-blue-50 p-6 shadow-sm ring-1 ring-blue-100'>
+  <div className='mb-8 rounded-2xl bg-blue-50 p-6 shadow-sm ring-1 ring-blue-100'>
     <div className='flex items-center justify-between'>
       <div>
         <h2 className='text-6xl font-extrabold text-blue-900'>{temp}°</h2>
@@ -34,7 +34,7 @@ const CurrentWeatherCard = ({
         <span className='text-sm opacity-70'>최저</span> {today.mintemp_c}°
       </span>
     </div>
-  </section>
+  </div>
 );
 
 export default CurrentWeatherCard;

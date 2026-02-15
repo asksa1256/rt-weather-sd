@@ -2,6 +2,7 @@ import { useWeather } from '@/entities/weather/model/useWeather';
 import { cn } from '@/shared/lib/utils/utils';
 import LocationPermissionMessage from '@/shared/ui/message/LocationPermissionMessage';
 import WeatherForecastLayout from './WeatherForecastLayout';
+import WeatherForecastSkeleton from './WeatherForecastSkeleton';
 
 interface Props {
   coords: { lat: number; lon: number } | null;
@@ -20,10 +21,7 @@ const WeatherForecastWidget = ({ coords, address, className }: Props) => {
   const renderContent = () => {
     if (!coords) return <LocationPermissionMessage />;
 
-    if (isWeatherPending)
-      return (
-        <div className='text-sm text-gray-500'>날씨 정보 불러오는 중...</div>
-      );
+    if (isWeatherPending) return <WeatherForecastSkeleton />;
 
     if (isWeatherError)
       return (
