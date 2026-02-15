@@ -8,8 +8,8 @@ import {
   CommandList,
 } from '@/shared/ui/command';
 import { Popover, PopoverAnchor, PopoverContent } from '@/shared/ui/popover';
-import { Search, X, Info } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { Info, Search, X } from 'lucide-react';
+import { useMemo, useState, type KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCoordinate } from '../model/useCoordinate';
 
@@ -64,6 +64,13 @@ const LocationSearch = () => {
     setCommandOpen(false);
   };
 
+  const handleEnterClear = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      setInputValue('');
+      setCommandOpen(false);
+    }
+  };
+
   return (
     <div className='w-full'>
       <Popover open={commandOpen} onOpenChange={setCommandOpen}>
@@ -81,8 +88,9 @@ const LocationSearch = () => {
               {inputValue.length > 0 && (
                 <button
                   aria-label='검색어 초기화'
-                  onClick={handleClear}
                   className='text-muted-foreground hover:text-foreground absolute top-1/2 right-3 z-1 -translate-y-1/2 p-1 transition-colors'
+                  onClick={handleClear}
+                  onKeyDown={e => handleEnterClear(e)}
                 >
                   <X className='size-5' />
                 </button>
@@ -100,7 +108,10 @@ const LocationSearch = () => {
               ) : (
                 <CommandGroup className='max-h-[300px] overflow-y-auto'>
                   {filteredAddresses.length >= MAX_SEARCH_RESULTS && (
-                    <p className='flex items-center text-sm text-gray-500 p-2 gap-1'><Info className='size-3.5' /> 검색 결과는 {MAX_SEARCH_RESULTS}개까지 표시됩니다.</p>
+                    <p className='flex items-center gap-1 p-2 text-sm text-gray-500'>
+                      <Info className='size-3.5' /> 검색 결과는{' '}
+                      {MAX_SEARCH_RESULTS}개까지 표시됩니다.
+                    </p>
                   )}
                   {filteredAddresses.map(addr => (
                     <CommandItem
