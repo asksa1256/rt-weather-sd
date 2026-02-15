@@ -43,12 +43,7 @@ const WeatherForecastWidget = ({ coords, address, className }: Props) => {
   };
 
   return (
-    <div
-      className={cn(
-        'flex min-h-[400px] w-full items-center justify-center',
-        className,
-      )}
-    >
+    <div className={cn('flex w-full items-center justify-center', className)}>
       {renderContent()}
     </div>
   );

@@ -11,10 +11,8 @@ const WeatherDetailPage = () => {
   const coords = lat && lon ? { lat: Number(lat), lon: Number(lon) } : null;
 
   return (
-    <section className='flex w-full flex-col gap-4'>
-      <div className='flex justify-end'>
-        <MainButton />
-      </div>
+    <section className='flex w-full flex-col items-start gap-4'>
+      <MainButton />
       <WeatherForecastWidget coords={coords} address={address} />
     </section>
   );

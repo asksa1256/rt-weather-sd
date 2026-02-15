@@ -1,12 +1,18 @@
 import { useFavorites } from '@/features/favorites/model/useFavorites';
+import { cn } from '@/shared/lib/utils/utils';
 import { Star } from 'lucide-react';
 
 interface AddFavoriteButtonProps {
   address: string;
   coords: { lat: number; lon: number };
+  className?: string;
 }
 
-const AddFavoriteButton = ({ address, coords }: AddFavoriteButtonProps) => {
+const AddFavoriteButton = ({
+  address,
+  coords,
+  className,
+}: AddFavoriteButtonProps) => {
   const { favorites, addFavorite, removeFavorite } = useFavorites();
 
   const isFavorited = favorites.some(fav => fav.address === address);
@@ -32,7 +38,10 @@ const AddFavoriteButton = ({ address, coords }: AddFavoriteButtonProps) => {
   return (
     <button
       onClick={handleFavoriteClick}
-      className='rounded-full p-2 transition-colors hover:bg-gray-100'
+      className={cn(
+        'rounded-full p-2 transition-colors hover:bg-gray-100',
+        className,
+      )}
     >
       <Star
         className={`h-8 w-8 ${isFavorited ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
