@@ -14,4 +14,14 @@ export default defineConfig({
   css: {
     transformer: 'postcss',
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'ui-vendor': ['lucide-react', 'class-variance-authority', 'clsx', 'tailwind-merge'],
+        },
+      },
+    },
+  },
 });
