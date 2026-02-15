@@ -1,9 +1,12 @@
+import { useDebouncedValue } from '@/shared/lib/hooks/useDebouncedValue';
 import { useEffect, useMemo, useState } from 'react';
 
 export const useLocationSearch = (minInputLen: number, maxResults: number) => {
   const [locationData, setLocationData] = useState<string[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLocationLoading, setIsLocationLoading] = useState(false);
+
+  const debouncedInput = useDebouncedValue(inputValue);
 
   useEffect(() => {
     const loadLocationData = async () => {
@@ -19,15 +22,15 @@ export const useLocationSearch = (minInputLen: number, maxResults: number) => {
       }
     };
 
-    if (inputValue.length >= 1) loadLocationData(); // 검색어 입력 시 주소 데이터 로드
-  }, [inputValue, locationData.length]);
+    if (debouncedInput.length >= 1) loadLocationData();
+  }, [debouncedInput, locationData.length]);
 
   const filteredLocations = useMemo(() => {
-    if (inputValue.length < minInputLen) return [];
+    if (debouncedInput.length < minInputLen) return [];
     return locationData
-      .filter(addr => addr.includes(inputValue))
+      .filter(addr => addr.includes(debouncedInput))
       .slice(0, maxResults);
-  }, [inputValue, locationData, minInputLen, maxResults]);
+  }, [debouncedInput, locationData, minInputLen, maxResults]);
 
   return {
     inputValue,
