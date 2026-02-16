@@ -1,5 +1,6 @@
 import LocationSearch from '@/features/search-location/ui/LocationSearch';
 import MainPage from '@/pages/home/ui/MainPage';
+import NotFoundPage from '@/pages/not-found/ui/NotFoundPage';
 import WeatherDetailPage from '@/pages/weather-detail/ui/WeatherDetailPage';
 import '@/shared/styles/globals.css';
 import Header from '@/shared/ui/Header';
@@ -16,6 +17,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<MainPage />} />
           <Route path='/weather' element={<WeatherDetailPage />} />
+          <Route path='*' element={<NotFoundPage />} />
         </Routes>
       </main>
     </BrowserRouter>
