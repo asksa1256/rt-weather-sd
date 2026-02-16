@@ -14,6 +14,7 @@ export const useFavorites = () => {
       const savedFavorites = localStorage.getItem(STORAGE_KEY);
       return savedFavorites ? JSON.parse(savedFavorites) : [];
     },
+    staleTime: Infinity,
   });
 
   // 즐겨찾기 추가 (낙관적 업데이트)
