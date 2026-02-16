@@ -14,51 +14,42 @@
 
 ## 2️⃣ 구현 기능 상세
 #### ✅ 날씨 조회
-<details>
-  <summary>앱 첫 진입 시 사용자의 현재 위치를 감지하여 그 위치의 날씨 정보를 보여줍니다.</summary>
-  <video src="https://github.com/user-attachments/assets/f650c7bf-0f65-4abe-bf81-de2ee16ad779" controls width="100%">
-      Your browser does not support the video tag.
-  </video>
-</details>
+- 앱 첫 진입 시 사용자의 현재 위치를 감지하여 그 위치의 날씨 정보를 보여줍니다.
 
-<details>
-  <summary>유저가 원하는 장소를 검색(기초자치단체, 구, 동에 상관없이 검색 가능)하고 그 장소의 날씨 정보를 조회합니다. </summary>
-  <video src="https://github.com/user-attachments/assets/f459c088-3e21-4401-a2a1-5372b815648e" controls width="100%">
-      Your browser does not support the video tag.
-  </video>
-</details>
+https://github.com/user-attachments/assets/49aa6600-4fde-4e6b-8ebb-43cb64957123
 
-<details>
-  <summary>해당 장소의 날씨 정보가 없는 경우 “해당 장소의 정보가 제공되지 않습니다.” 를 UI에 명시합니다. </summary>
-  <video src="https://github.com/user-attachments/assets/1f5c4fc8-32dd-4c61-aa6c-5cf62c87b404" controls width="100%">
-      Your browser does not support the video tag.
-  </video>
-</details>
+- 위치 권한 거부 시 현재 위치의 날씨 정보가 나타나지 않습니다.
+
+https://github.com/user-attachments/assets/728b591f-fe88-4ec6-a450-9b8576b96d64
+
+- 유저가 원하는 장소를 검색(기초자치단체, 구, 동에 상관없이 검색 가능)하고 그 장소의 날씨 정보를 조회합니다.
+
+https://github.com/user-attachments/assets/b131dc10-22b4-49d5-a383-457c01715cfb
+
+- 해당 장소의 날씨 정보가 없는 경우 “해당 장소의 정보가 제공되지 않습니다.” 를 UI에 명시합니다.
+
+https://github.com/user-attachments/assets/40e7e4e7-2d41-4569-b925-258a88eb1db6
+
 
 #### ✅ 장소 즐겨찾기
-<details>
-  <summary>즐겨찾기에는 최대 6개의 장소를 추가할 수 있고, 추가한 장소는 카드 UI 형태로 등록됩니다.<br/>
-    즐겨찾기에 추가된 장소 카드에는 현재 날씨 정보, 당일의 기온(최저, 최고)을 보여줍니다.
-  </summary>
-  <video src="https://github.com/user-attachments/assets/854be831-401d-480b-b534-6f02dd4a13f3" controls width="100%">
-      Your browser does not support the video tag.
-  </video>
-</details>
+- 검색한 장소를 즐겨찾기에 추가하거나 삭제할 수 있습니다.
+
+https://github.com/user-attachments/assets/466e0696-1469-4da4-8939-4bde7b22de8c
+
+- 즐겨찾기에는 최대 6개의 장소를 추가할 수 있고, 추가한 장소는 카드 UI 형태로 등록됩니다.<br/>
+즐겨찾기에 추가된 장소 카드에는 현재 날씨 정보, 당일의 기온(최저, 최고)을 보여줍니다.
+
+https://github.com/user-attachments/assets/627e1b28-1981-4374-999b-8b50d6d110ee
+
+- 즐겨찾기에 추가된 장소의 이름(별칭)을 수정할 수 있습니다.
+
+https://github.com/user-attachments/assets/c4c424b1-e01f-46f6-958f-5acdafd9214e
+
+- 즐겨찾기 카드를 클릭하면 해당 장소의 상세 페이지로 이동하고, 상세 페이지에 날씨 정보를 표시합니다.
+
+https://github.com/user-attachments/assets/f78ac69e-6fb4-46be-a594-c31a336bd163
 
 
-<details>
-  <summary>즐겨찾기에 추가된 장소의 이름(별칭)을 수정할 수 있습니다. </summary>
-  <video src="https://github.com/user-attachments/assets/3741947a-262e-4a51-a895-3bb2f458154c" controls width="100%">
-      Your browser does not support the video tag.
-  </video>
-</details>
-
-<details>
-  <summary>즐겨찾기 카드를 클릭하면 해당 장소의 상세 페이지로 이동하고, 상세 페이지에 날씨 정보를 표시합니다.</summary>
-  <video src="https://github.com/user-attachments/assets/9ef45c6c-41c4-4d3a-97ab-fe2549785547" controls width="100%">
-      Your browser does not support the video tag.
-  </video>
-</details>
 
 
 ## 3️⃣ 기술적 의사결정
