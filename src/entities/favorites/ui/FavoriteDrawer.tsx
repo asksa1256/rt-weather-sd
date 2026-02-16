@@ -53,7 +53,7 @@ const FavoriteDrawer = () => {
               </div>
             )}
             {favorites.length > 0 && (
-              <>
+              <div className='pb-12'>
                 <p className='flex items-center gap-1 p-2 text-sm text-gray-500'>
                   <Info className='size-3.5' /> 장소별 별칭을 수정할 수
                   있습니다.
@@ -62,7 +62,7 @@ const FavoriteDrawer = () => {
                   favorites={favorites}
                   onCloseDrawer={() => setIsDrawerOpen(false)}
                 />
-              </>
+              </div>
             )}
           </div>
         </div>
