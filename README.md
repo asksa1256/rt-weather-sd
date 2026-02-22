@@ -152,12 +152,11 @@ src/
 1. 프로젝트를 클론하고, 의존성을 설치한 뒤 실행합니다.
 
 ```
-git clone [https://github.com/asksa1256/rt-weather-sd.git](https://github.com/asksa1256/rt-weather-sd.git)
-cd rt-weather-sd
+git clone https://github.com/asksa1256/rt-weather-sd.git .
 pnpm install
 ```
 
-2. 루트 디렉토리에 `.env` 파일을 생성하고, 환경 변수를 입력합니다.
+2. 루트 디렉토리에 `.env` 파일을 생성하고, 환경 변수를 입력합니다. (제출 메일에 키를 동봉해두었습니다.)
 - weatherapi.com API 키:
 ```
 VITE_WEATHER_KEY=your_weatherapi_key
